@@ -1,59 +1,55 @@
-# 🌟 Evidencia de Actividad: Autenticación y CRUD de Tareas en React Native
+# ✅ Informe de Actividad: Autenticación y Gestión de Tareas con React Native
 
-## 📅 Actividad Realizada
-Implementé una aplicación móvil en **React Native con Expo**, cumpliendo con los objetivos de autenticación y un CRUD de tareas utilizando **expo-sqlite**.
+## 📲 Descripción General
+Desarrollé una aplicación móvil utilizando **React Native con Expo**, en la que implementé un sistema de **autenticación local** y un **CRUD de tareas** con almacenamiento persistente mediante `expo-sqlite`.
 
 ---
 
-## 👤 Parte 1: Autenticación con Credenciales Hardcoded
+## 🔐 Parte 1: Autenticación Local
 
 ### Objetivo:
-Permitir el inicio de sesión de un usuario validando manualmente sus credenciales.
+Habilitar el acceso a la app mediante validación de credenciales codificadas manualmente (sin backend).
 
-### Acciones Realizadas:
-- Agregué inputs para capturar correo y contraseña.
-- Validé las credenciales usando datos hardcoded:
-  - **Correo:** `usuario@ejemplo.com`
-  - **Contraseña:** `password123`
-- Almacené la sesión usando `expo-secure-store` para persistencia.
-- Mostré un mensaje de error si las credenciales eran incorrectas.
-- Rediseñé la interfaz de login y registro con estilos modernos y atractivos (fondo negro, textos vibrantes).
+### Lo que hice:
+- Añadí campos de entrada para capturar el correo y la contraseña.
+- Validé las credenciales con datos predefinidos:
+  - `usuario@ejemplo.com`
+  - `password123`
+- Utilicé `expo-secure-store` para guardar la sesión del usuario de forma segura.
+- Implementé mensajes de error para credenciales inválidas.
+- Rediseñé las pantallas de login y registro con un estilo moderno y llamativo: fondo oscuro, efectos de sombra e íconos.
 
 ---
 
-## 📄 Parte 2: CRUD de Tareas con expo-sqlite
+## 📂 Parte 2: CRUD de Tareas (expo-sqlite)
 
 ### Objetivo:
-Desarrollar un pequeño sistema de tareas que permita:
-- Agregar
-- Listar
-- Eliminar tareas
+Crear una interfaz que permita gestionar tareas de manera local y persistente.
 
-### Acciones Realizadas:
-- Implementé un input y botón para agregar tareas.
-- Usé `expo-sqlite` para almacenar las tareas localmente.
-- Mostré las tareas almacenadas usando `FlatList`.
-- Implementé eliminación de tareas mediante un botón por cada una.
-- Mejoré toda la estética con colores oscuros, acentos brillantes (azul, morado), sombras y bordes personalizados.
+### Lo que desarrollé:
+- Una interfaz para añadir tareas con input y botón.
+- Visualización de tareas usando `FlatList`.
+- Funcionalidad para eliminar tareas individuales.
+- Guardado de datos en SQLite localmente con `expo-sqlite`.
+- Mejoras visuales: tarjetas con glassmorphism, botones con íconos y mensajes de guía cuando no hay tareas registradas.
+- Añadí detalles extra para enriquecer la interfaz, como contador de tareas, sugerencias visibles y rediseño completo de los elementos de la lista.
 
 ---
 
-## 🎓 Tecnologías Utilizadas
-- React Native
-- Expo Router
+## 🛠️ Herramientas y Librerías Utilizadas
+- React Native (Expo)
 - Expo Secure Store
 - Expo SQLite
 - React Navigation
+- Expo Router
+- Ionicons
 
 ---
 
-## 💡 Conclusión
-Esta actividad me permitió reforzar conceptos importantes como:
-- Validación de formularios
-- Manejo de sesiones locales
-- Almacenamiento persistente con SQLite
-- Modularización de componentes y pantallas
-- Aplicación de estilos personalizados para mejorar la experiencia visual y de usuario.
-
-> Trabajo completo, funcional y con un diseño visualmente atractivo.
-
+## 🧠 Aprendizajes y Conclusión
+Esta actividad fue clave para reforzar mis conocimientos sobre:
+- Autenticación y validación en frontend sin backend.
+- Almacenamiento local de datos en móviles.
+- Manejo de estado con hooks (`useState`, `useEffect`).
+- Diseño de interfaces más interactivas y atractivas.
+- Organización modular de componentes y navegación.
