@@ -1,13 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, StyleSheet, FlatList, TouchableOpacity, Alert, Animated } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  Animated,
+  Button,
+} from "react-native";
 import { useSession } from "../../ctx";
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+
+import { usePushNotifications } from "../../components/useNotifications"; // Hook de notificaciones
+import * as Notifications from "expo-notifications";
 
 const Main = () => {
   const { session, signOut, getTasks, addTask, deleteTask } = useSession();
   const router = useRouter();
-  const [task, setTask] = useState('');
+  const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -28,7 +41,7 @@ const Main = () => {
     if (task && session?.email) {
       try {
         await addTask(session.email, task);
-        setTask('');
+        setTask("");
         const updatedTasks = await getTasks(session.email);
         setTasks(updatedTasks);
       } catch (e) {
@@ -42,6 +55,16 @@ const Main = () => {
   const handleDeleteTask = async (taskId) => {
     try {
       await deleteTask(taskId);
+
+      // ✅ Notificación después de eliminar tarea
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Se eliminó una tarea 🗑️",
+          body: "Acabas de eliminar una actividad de tu lista. ¡Sigue así y mantén tu productividad al máximo!",
+        },
+        trigger: null,
+      });
+
       const updatedTasks = await getTasks(session.email);
       setTasks(updatedTasks);
     } catch (e) {
@@ -52,10 +75,18 @@ const Main = () => {
   const TaskItem = ({ item }) => (
     <Animated.View style={styles.taskItem}>
       <View style={styles.taskContent}>
-        <Ionicons name="checkmark-circle-outline" size={20} color="#00FFA3" style={{ marginRight: 8 }} />
+        <Ionicons
+          name="checkmark-circle-outline"
+          size={20}
+          color="#00FFA3"
+          style={{ marginRight: 8 }}
+        />
         <Text style={styles.taskText}>{item.task}</Text>
       </View>
-      <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteTask(item.id)}>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDeleteTask(item.id)}
+      >
         <Ionicons name="trash-outline" size={18} color="#fff" />
       </TouchableOpacity>
     </Animated.View>
@@ -78,8 +109,13 @@ const Main = () => {
   if (!session) {
     return (
       <View style={styles.container}>
-        <Text>No se encontró una sesión, por favor inicia sesión o regístrate</Text>
-        <Button title="Iniciar Sesión" onPress={() => router.push('/iniciar-sesion')} />
+        <Text>
+          No se encontró una sesión, por favor inicia sesión o regístrate
+        </Text>
+        <Button
+          title="Iniciar Sesión"
+          onPress={() => router.push("/iniciar-sesion")}
+        />
       </View>
     );
   }
@@ -106,7 +142,9 @@ const Main = () => {
         </View>
       </View>
 
-      {tasks.length === 0 ? renderEmpty() : (
+      {tasks.length === 0 ? (
+        renderEmpty()
+      ) : (
         <FlatList
           data={tasks}
           keyExtractor={(item) => item.id.toString()}
@@ -126,119 +164,118 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#0f0c29',
+    backgroundColor: "#0f0c29",
   },
   card: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: "#1a1a2e",
     borderRadius: 15,
     padding: 20,
-    shadowColor: '#00BFFF',
+    shadowColor: "#00BFFF",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.5,
     shadowRadius: 8,
   },
   heading: {
     fontSize: 26,
-    fontWeight: 'bold',
-    color: '#00FFA3',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "#00FFA3",
+    textAlign: "center",
     marginBottom: 5,
   },
   subheading: {
     fontSize: 15,
-    color: '#ccc',
-    textAlign: 'center',
+    color: "#ccc",
+    textAlign: "center",
     marginBottom: 15,
   },
   counter: {
-    color: '#aaa',
+    color: "#aaa",
     fontSize: 14,
-    textAlign: 'right',
+    textAlign: "right",
     marginBottom: 10,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   input: {
     flex: 1,
     height: 50,
-    backgroundColor: '#111',
+    backgroundColor: "#111",
     borderRadius: 10,
     paddingHorizontal: 15,
-    color: '#fff',
+    color: "#fff",
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: "#333",
     fontSize: 16,
   },
   addButton: {
-    backgroundColor: '#8A2BE2',
+    backgroundColor: "#8A2BE2",
     marginLeft: 10,
     padding: 12,
     borderRadius: 10,
   },
   taskItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.05)",
     padding: 15,
     borderRadius: 12,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#333',
-    backdropFilter: 'blur(5px)',
+    borderColor: "#333",
   },
   taskContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
   },
   taskText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
   deleteButton: {
-    backgroundColor: '#FF4500',
+    backgroundColor: "#FF4500",
     padding: 8,
     borderRadius: 8,
   },
   signOutButton: {
-    backgroundColor: '#DC143C',
+    backgroundColor: "#DC143C",
     paddingVertical: 14,
     borderRadius: 10,
     marginTop: 30,
-    alignItems: 'center',
+    alignItems: "center",
   },
   signOutButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 17,
   },
   emptyText: {
-    color: '#ccc',
-    textAlign: 'center',
+    color: "#ccc",
+    textAlign: "center",
     marginTop: 30,
     fontSize: 16,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   suggestionCard: {
     marginTop: 20,
-    backgroundColor: '#1e1e2f',
+    backgroundColor: "#1e1e2f",
     padding: 15,
     borderRadius: 12,
-    borderColor: '#444',
+    borderColor: "#444",
     borderWidth: 1,
   },
   suggestionTitle: {
-    color: '#00BFFF',
+    color: "#00BFFF",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 8,
   },
   suggestionItem: {
-    color: '#ccc',
+    color: "#ccc",
     marginBottom: 4,
   },
 });

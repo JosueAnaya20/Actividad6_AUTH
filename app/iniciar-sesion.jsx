@@ -4,15 +4,29 @@ import { useSession } from '../ctx';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
+import { usePushNotifications } from '../components/useNotifications'; // Asegúrate que el path sea correcto
+import * as Notifications from 'expo-notifications';
+
 export default function SignIn() {
   const { signIn } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  const { expoPushToken } = usePushNotifications();
 
   const handleSignIn = async () => {
     try {
       await signIn(email, password);
+
+      // ✅ Notificación después del login exitoso con mensaje extenso
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Inicio de sesión exitoso ✅',
+          body: `¡Bienvenido, ${email}! Ya puedes comenzar a registrar tus actividades, organizar tu lista de tareas y llevar el control de tu productividad como todo un pro. 💪📝`,
+        },
+        trigger: null,
+      });
+
     } catch (error) {
       Alert.alert('Error al Iniciar Sesión', error.message);
     }
@@ -67,11 +81,10 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0c29', // fondo base oscuro
+    backgroundColor: '#0f0c29',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    background: 'linear-gradient(45deg, #0f0c29, #302b63, #24243e)',
   },
   card: {
     width: '100%',
@@ -79,7 +92,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     padding: 30,
     borderRadius: 20,
-    backdropFilter: 'blur(10px)',
     borderWidth: 1,
     borderColor: '#ffffff22',
   },

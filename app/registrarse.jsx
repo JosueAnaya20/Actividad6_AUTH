@@ -4,6 +4,9 @@ import { useSession } from '../ctx';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
+import { usePushNotifications } from '../components/useNotifications'; // Asegúrate que el path sea correcto
+import * as Notifications from 'expo-notifications';
+
 export default function SignUp() {
   const { signUp } = useSession();
   const [email, setEmail] = useState('');
